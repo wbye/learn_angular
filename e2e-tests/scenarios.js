@@ -1,42 +1,45 @@
 'use strict';
 
-/* https://github.com/angular/protractor/blob/master/docs/toc.md */
+describe('PhoneCat App', function() {
 
-describe('my app', function() {
+    describe('Phone list view', function() {
+
+        beforeEach(function() {
+            browser.get('app/index.html');
+        });
+
+        var phoneList = element.all(by.repeater('phone in phones'));
+        var query = element(by.model('query'));
+        
+        //instance
+        it('should filter the phone list as a user types into the search box', function() {
+
+            
+
+            expect(phoneList.count()).toBe(3);
+
+            query.sendKeys('nexus');
+            expect(phoneList.count()).toBe(1);
+
+            query.clear();
+            query.sendKeys('motorola');
+            expect(phoneList.count()).toBe(2);
+
+            query.clear();
+            query.sendKeys('xxx');
+            expect(phoneList.count()).toBe(0);
 
 
-  it('should automatically redirect to /view1 when location hash/fragment is empty', function() {
-    browser.get('index.html');
-    expect(browser.getLocationAbsUrl()).toMatch("/view1");
-  });
+        });
 
+        it('should display the current filter value in the title bar', function() {
 
-  describe('view1', function() {
+            query.clear();
+            expect(browser.getTitle()).toMatch(/Google Phone Gallery:\s*$/);
 
-    beforeEach(function() {
-      browser.get('index.html#/view1');
+            query.sendKeys("nexus");
+            expect(browser.getTitle()).toMatch(/Google Phone Gallery:nexus$/);
+
+        });
     });
-
-
-    it('should render view1 when user navigates to /view1', function() {
-      expect(element.all(by.css('[ng-view] p')).first().getText()).
-        toMatch(/partial for view 1/);
-    });
-
-  });
-
-
-  describe('view2', function() {
-
-    beforeEach(function() {
-      browser.get('index.html#/view2');
-    });
-
-
-    it('should render view2 when user navigates to /view2', function() {
-      expect(element.all(by.css('[ng-view] p')).first().getText()).
-        toMatch(/partial for view 2/);
-    });
-
-  });
 });
